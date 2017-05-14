@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    	<title></title>
+        <meta charset="utf-8">
+        	<link rel="stylesheet" type="text/css" href="css/main.css">
+        	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+
+
+        <script type="text/javascript">
+		
+		var agent = navigator.userAgent.toLowerCase();
+		if (agent.indexOf('firefox') != -1 || agent.indexOf('opera') != -1){
+			extension = ".ogg";
+		}
+		function initAudioPlayer(){
+			var audio, playbtn, seekSlider, mutebtn, volumeSlider, seeking = false, seekto, curTimeText, durTimeText, playlistStatus, speedList, mylist;
+			var extension = ".mp3";
+			var dir = "audio/";
+			var playlist = ["dash_berlin", "Odesza", "arnej", "shura_touch_remix", "shura"];
+			var playlistIndex = 0;
+			
+
+			//Set object references
+			playbtn = document.getElementById('playPauseBtn');
+			mutebtn = document.getElementById('muteBtn');
+			volumeSlider = document.getElementById('volumeSlider');
+			seekSlider = document.getElementById('seekSlider');
+			curTimeText = document.getElementById('curTimeText');
+			durTimeText = document.getElementById('durTimeText');
+			playlistStatus = document.getElementById('playlistStatus');
+			speedList = document.getElementById('speedList');
+			mylist = document.getElementById('myList');
+
+			//Audio object
+			audio = new Audio();
+			audio.src = dir + playlist[0] + extension;
+			audio.loop = false;
+			
+
+			playlistStatus.innerHTML = "Track N." + (playlistIndex+1) + " - " +  playlist[playlistIndex] + extension;
+			
+
+			//Add event handling
+			playbtn.addEventListener('click', playPause);
+			mutebtn.addEventListener('click', muteUnmute);
+			seekSlider.addEventListener('mousedown', function (event){seeking = true; seek(event);});
+			seekSlider.addEventListener('mousemove', function (event){seek(event);});
+			seekSlider.addEventListener('mouseup', function (event){seeking = false;});
+			volumeSlider.addEventListener('mousemove', setvolume);
+			audio.addEventListener('timeupdate', function(){seekTimeUpdate(); });
+			audio.addEventListener('ended', function (){switchTrack(); });
+			speedList.addEventListener('change', changeSpeed);
+			mylist.addEventListener('change', changeTrack);
+
+
+			function changeTrack(event){
+				audio.src = dir + event.target.value + extension;
+				audio.play();
+				//var div = document.getElementById('div').innerHTML ="Now playing: " + mylist.value;
+			}
+
+
+			function changeSpeed(event){
+				audio.playbackRate = event.target.value;
+			}
+
+
+			function switchTrack(){
+				if (playlistIndex == playlist.length - 1){
+					playlistIndex = 0;
+				}
+				else{
+					playlistIndex++;
+				}
+
+				playlistStatus.innerHTML = "Track N." + (playlistIndex+1) + " - " + playlist[playlistIndex] + extension;
+				audio.src = dir + playlist[playlistIndex] + extension;
+				audio.play();
+			}
+
+			
+			function playPause(){
+				if (audio.paused) {
+					audio.play();
+					playbtn.style.backgroundImage = 'url("images/pause.png")';
+					playbtn.style.backgroundRepeat = 'no-repeat'; 
+				}
+				else{
+					audio.pause();
+					playbtn.style.backgroundImage = 'url("images/play.png")';
+					playbtn.style.backgroundRepeat = 'no-repeat'; 	
+				}
+			}
+
+			function muteUnmute(){
+				if(audio.muted){
+					audio.muted = false;
+					mutebtn.style.backgroundImage = 'url("images/volume.png")';
+					volumeSlider.value = 100;
+				}
+				else{
+					audio.muted = true;
+					mutebtn.style.backgroundImage = 'url("images/mute.png")';	
+					volumeSlider.value = 0;
+				}				
+			}
+
+			function seek (event){
+				if(seeking){
+					seekSlider.value = event.clientX - seekSlider.offsetLeft;
+					seekto = audio.duration * (seekSlider.value / 300);
+					audio.currentTime = seekto;
+				}
+			}
+
+			function setvolume(){
+					audio.volume = volumeSlider.value / 100;
+				}
+
+			function seekTimeUpdate(){
+				var newTime = audio.currentTime * (300 / audio.duration);
+				seekSlider.value = newTime;
+				var curMins = Math.floor(audio.currentTime / 60);
+				var curSecs = Math.floor(audio.currentTime - curMins * 60);
+				var durMins = Math.floor(audio.duration / 60);
+				var durSecs = Math.floor(audio.duration - durMins * 60);
+				if (curSecs < 10){curSecs = "0" + curSecs}
+				if (curMins < 10){curMins = "0" + curMins}
+				if (durSecs < 10){durMins = "0" + durMins}
+				if (durSecs < 10){durSecs = "0" + durSecs}
+				curTimeText.innerHTML = curMins + ":" + curSecs;
+				durTimeText.innerHTML = durMins + ":" + durSecs;	
+			}
+
+		}	
+		
+
+		window.addEventListener("load", initAudioPlayer)
+		</script>
+    </head>
+    <body>
+    	<div id="audioPlayer">
+    		<div id="audioControls">
+		    	<button id="playPauseBtn"></button> 
+		    	<input id="seekSlider" type="range" min="0" max="300" value="0" step="1">
+		    	<div id="timeBox">
+		    		<span id="curTimeText">00:00</span> / <span id="durTimeText">00:00</span>
+		    	</div>
+		    	<button id="muteBtn"></button>
+		    	<input id="volumeSlider" type="range" min="0" max="100" value="100" step="1">
+			</div>
+		</div>
+		<br>
+		Change Speed:
+		<select id="speedList">
+			<option value="0.5">0.5</option>
+			<option value="0.75">0.75</option>
+			<option value="1" selected>Normal</option>
+			<option value="1.25">1.25</option>
+			<option value="1.5">1.5</option>
+
+			<option value="2">2</option>
+		</select>
+		<br>
+		Choose Track:
+		<select id="myList">
+		<option value="dash_berlin">Dash Berlin</option>
+		<option value="shura">Shura</option>
+		<option value="shura_touch_remix">Shura (remix)</option>
+		<option value="Odesza">Odesza</option>
+		<option value="arnej">Arnej</option>
+		</select>
+		<h2 id="playlistStatus"></h2>
+		<div id="div"></div>
+	</body>
+</html>
