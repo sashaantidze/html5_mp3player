@@ -1,5 +1,14 @@
 body{
-	background-color:white;
+	background-color:cadetblue;
+}
+
+#container{
+	width: 750px;
+	margin: 50px auto;
+}
+
+#options{
+	text-align: center;
 }
 
 #trackName{
@@ -33,7 +42,7 @@ div#audioControls > input{
 	outline: none;
 	display: block;
 	float: left;
-	margin: 24px 10px 0px 0px;
+	margin: 35px 10px 0px 0px;
 }
 
 input#seekSlider{
@@ -113,21 +122,26 @@ button:active{
 }
 
 button#playPauseBtn{
-	background-color: rgb(250, 250, 250);
-	width: 34px;
-	height: 34px;
-	background-image: url("../images/pause.png");
+	/* background-color: rgb(250, 250, 250); */
+	width: 40px;
+	height: 40px;
+	background-image: url("../images/play.png");
 	background-repeat: no-repeat;
 	background-position: center;
+	background-size: 45px;
+    border-radius: 25px;
 }
 
 
 
 button#muteBtn{
 	background-color: rgb(250, 250, 250);
-	width: 24px;
-	height: 24px;
+	width: 30px;
+	height: 30px;
 	background-image: url("../images/volume.png");
 	background-repeat: no-repeat;
 	background-position: center;
+	background-size: 44px;
+    	border-radius: 20px;
+    	background-position-y: -5px;
 }
