@@ -14,10 +14,10 @@
 			extension = ".ogg";
 		}
 		function initAudioPlayer(){
-			var audio, playbtn, seekSlider, mutebtn, volumeSlider, seeking = false, seekto, curTimeText, durTimeText, playlistStatus, speedList, mylist;
+			var audio, playbtn, seekSlider, mutebtn, volumeSlider, seeking = false, seekto, curTimeText, durTimeText, speedList, mylist;
 			var extension = ".mp3";
 			var dir = "audio/";
-			var playlist = ["dash_berlin", "Odesza", "arnej", "shura_touch_remix", "shura"];
+			var playlist = ["dash_berlin", "arnej", "shura_touch_remix", "shura"];
 			var playlistIndex = 0;
 			
 
@@ -28,7 +28,6 @@
 			seekSlider = document.getElementById('seekSlider');
 			curTimeText = document.getElementById('curTimeText');
 			durTimeText = document.getElementById('durTimeText');
-			playlistStatus = document.getElementById('playlistStatus');
 			speedList = document.getElementById('speedList');
 			mylist = document.getElementById('myList');
 
@@ -38,7 +37,6 @@
 			audio.loop = false;
 			
 
-			playlistStatus.innerHTML = "Track N." + (playlistIndex+1) + " - " +  playlist[playlistIndex] + extension;
 			
 
 			//Add event handling
@@ -74,7 +72,6 @@
 					playlistIndex++;
 				}
 
-				playlistStatus.innerHTML = "Track N." + (playlistIndex+1) + " - " + playlist[playlistIndex] + extension;
 				audio.src = dir + playlist[playlistIndex] + extension;
 				audio.play();
 			}
@@ -140,7 +137,8 @@
 		</script>
     </head>
     <body>
-    	<div id="audioPlayer">
+    	<div id="container">
+    		<div id="audioPlayer">
     		<div id="audioControls">
 		    	<button id="playPauseBtn"></button> 
 		    	<input id="seekSlider" type="range" min="0" max="300" value="0" step="1">
@@ -150,28 +148,32 @@
 		    	<button id="muteBtn"></button>
 		    	<input id="volumeSlider" type="range" min="0" max="100" value="100" step="1">
 			</div>
-		</div>
-		<br>
-		Change Speed:
-		<select id="speedList">
-			<option value="0.5">0.5</option>
-			<option value="0.75">0.75</option>
-			<option value="1" selected>Normal</option>
-			<option value="1.25">1.25</option>
-			<option value="1.5">1.5</option>
+			</div>
+			<br>
+			<div id="options">
+				<h3>Change Speed:</h3>
+				<select id="speedList">
+					<option value="0.5">0.5</option>
+					<option value="0.75">0.75</option>
+					<option value="1" selected>Normal</option>
+					<option value="1.25">1.25</option>
+					<option value="1.5">1.5</option>
 
-			<option value="2">2</option>
-		</select>
-		<br>
-		Choose Track:
-		<select id="myList">
-		<option value="dash_berlin">Dash Berlin</option>
-		<option value="shura">Shura</option>
-		<option value="shura_touch_remix">Shura (remix)</option>
-		<option value="Odesza">Odesza</option>
-		<option value="arnej">Arnej</option>
-		</select>
-		<h2 id="playlistStatus"></h2>
-		<div id="div"></div>
+					<option value="2">2</option>
+				</select>
+				<br>
+				<h3>Choose Track:</h3>
+				
+				<select id="myList">
+				<option value="dash_berlin">Dash Berlin</option>
+				<option value="shura">Shura</option>
+				<option value="shura_touch_remix">Shura (remix)</option>
+				<option value="arnej">Arnej</option>
+				</select>
+			</div>
+			
+			<div id="div"></div>	
+    	</div>
+    	
 	</body>
 </html>
